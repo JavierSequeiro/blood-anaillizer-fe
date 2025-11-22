@@ -16,7 +16,7 @@ import { Button } from "./components/ui/button";
 import { bloodTestApi, userApi } from "./utils/api";
 import { analyzeBloodTestFile } from "./utils/pythonApi";
 import { toast } from "sonner@2.0.3";
-import logo from "./backend-template/utils/Company_Logo.png";
+import logo from "./assets/Company_Logo.png";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
