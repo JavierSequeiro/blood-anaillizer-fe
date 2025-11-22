@@ -26,7 +26,8 @@ function getPythonApiUrl(): string {
   }
   
   // return 'http://localhost:8000';
-  return "https://blood-anaillizer.onrender.com";
+  // return "https://blood-anaillizer.onrender.com";
+  return "https://blood-anaillizer-982395634904.europe-west6.run.app";
 }
 
 const PYTHON_API_URL = getPythonApiUrl();
