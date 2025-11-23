@@ -152,7 +152,10 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
         color = "w-4 h-4 text-red-600";
       } else if (firstInRange && lastInRange) {
         // Scenario 3: Maintenance/Stable (inside -> inside range)
-        color = "w-4 h-4 text-green-600";
+        color = "w-4 h-4 text-gray-600";
+      }else if (!firstInRange && !lastInRange) {
+        // Scenario 3: Maintenance/Stable (inside -> inside range)
+        color = "w-4 h-4 text-red-600";
       } else {
         // Scenario 4 (Default/Other): Both outside OR Both outside (but still trending)
         // If both are outside, we usually default to gray or red depending on policy,
