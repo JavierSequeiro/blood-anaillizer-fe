@@ -109,22 +109,66 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
         return biomarker?.category === selectedCategory;
       });
 
+  const isWithinRange = (value: number, min: number, max: number): boolean => {
+  return value >= min && value <= max;};
+
+  type TrendResult = {
+    direction: "up" | "down" | "stable";
+    percentage: number;
+    color: "w-4 h-4 text-green-600" | "w-4 h-4 text-red-600" | "w-4 h-4 text-gray-600";
+  };
+
   // Calculate trend
   const calculateTrend = (biomarkerId: string) => {
     const values = orderedTests
       .map(test => test.biomarkers.find(b => b.id === biomarkerId)?.value)
       .filter((v): v is number => v !== undefined);
     
-    if (values.length < 2) return { direction: "stable", percentage: 0 };
+    if (values.length < 2) return { direction: "stable", percentage: 0, color:"w-4 h-4 text-gray-600"};
     
     const firstValue = values[0];
     const lastValue = values[values.length - 1];
     const change = ((lastValue - firstValue) / firstValue) * 100;
     
-    if (Math.abs(change) < 2) return { direction: "stable", percentage: change };
-    if (change > 0) return { direction: "up", percentage: change };
-    return { direction: "down", percentage: change };
+    const referenceRanges = orderedTests
+      .map(test => test.biomarkers.find(b => b.id === biomarkerId)?.referenceRange).find(rr => rr !== undefined);
+
+    // Colors: Green ("w-4 h-4 text-green-600") || Red ("w-4 h-4 text-red-600") || Gray ("w-4 h-4 text-gray-600")  
+    // if (Math.abs(change) < 2) return { direction: "stable", percentage: change };
+    // if (change > 0) return { direction: "up", percentage: change };
+    // return { direction: "down", percentage: change };
+  // };
+    // 3. Assess the clinical significance (Color logic)
+      const firstInRange = isWithinRange(firstValue, referenceRanges.min, referenceRanges.max);
+      const lastInRange = isWithinRange(lastValue, referenceRanges.min, referenceRanges.max);
+
+      let color: TrendResult['color'];
+
+      if (!firstInRange && lastInRange) {
+        // Scenario 1: Improvement (outside -> inside range)
+        color = "w-4 h-4 text-green-600";
+      } else if (firstInRange && !lastInRange) {
+        // Scenario 2: Deterioration (inside -> outside range)
+        color = "w-4 h-4 text-red-600";
+      } else if (firstInRange && lastInRange) {
+        // Scenario 3: Maintenance/Stable (inside -> inside range)
+        color = "w-4 h-4 text-green-600";
+      } else {
+        // Scenario 4 (Default/Other): Both outside OR Both outside (but still trending)
+        // If both are outside, we usually default to gray or red depending on policy,
+        // but for this example, we'll use gray as no defined improvement/deterioration based on range cross.
+        color = "w-4 h-4 text-gray-600";
+      }
+
+      // 4. Assess the direction and magnitude (Direction logic)
+      const direction = Math.abs(change) < 2 
+        ? "stable" 
+        : (change > 0 ? "up" : "down");
+      
+      // 5. Return the final result
+      return { direction, percentage: change, color: color};
   };
+
 
   // Get status color for value
   const getStatusColor = (value: number, range: { min: number; max: number }) => {
@@ -349,24 +393,24 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
                     <TableCell className="text-center">
                       {trend.direction === "up" && (
                         <div className="flex items-center justify-center gap-1">
-                          <TrendingUp className="w-4 h-4 text-red-600" />
-                          <span className="text-sm text-red-600">
+                          <TrendingUp className={trend.color} />
+                          <span className={`text-sm ${trend.color.replace('w-4 h-4 ', '')}`}>
                             +{trend.percentage.toFixed(1)}%
                           </span>
                         </div>
                       )}
                       {trend.direction === "down" && (
                         <div className="flex items-center justify-center gap-1">
-                          <TrendingDown className="w-4 h-4 text-green-600" />
-                          <span className="text-sm text-green-600">
+                          <TrendingDown className={trend.color} />
+                          <span className={`text-sm ${trend.color.replace('w-4 h-4 ', '')}`}>
                             {trend.percentage.toFixed(1)}%
                           </span>
                         </div>
                       )}
                       {trend.direction === "stable" && (
                         <div className="flex items-center justify-center gap-1">
-                          <Minus className="w-4 h-4 text-gray-600" />
-                          <span className="text-sm text-gray-600">Stable</span>
+                          <Minus className={trend.color} />
+                          <span className={`text-sm ${trend.color.replace('w-4 h-4 ', '')}`}>Stable</span>
                         </div>
                       )}
                     </TableCell>
