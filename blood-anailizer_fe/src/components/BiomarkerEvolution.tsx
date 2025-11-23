@@ -38,10 +38,10 @@ interface BiomarkerEvolutionProps {
 export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps) {
   const [selectedBiomarker, setSelectedBiomarker] = useState<string>("Hematocrit");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
+  const orderedTests = historicalTests.slice().reverse();
   const biomarkerDetailsMap = useMemo(() => {
     const map = new Map<string, { name: string, category: string }>();
-    for (const test of historicalTests) {
+    for (const test of orderedTests) {
       for (const biomarker of test.biomarkers) {
         if (!map.has(biomarker.id)) {
           map.set(biomarker.id, { 
