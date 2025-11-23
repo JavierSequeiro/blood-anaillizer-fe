@@ -57,7 +57,7 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
   // Get all unique biomarker IDs and categories
   const allBiomarkerIds = Array.from(
     new Set(
-      historicalTests.flatMap(test => 
+      orderedTests.flatMap(test => 
         test.biomarkers.map(b => b.id)
       )
     )
@@ -65,19 +65,19 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
 
   const allCategories = Array.from(
     new Set(
-      historicalTests.flatMap(test => 
+      orderedTests.flatMap(test => 
         test.biomarkers.map(b => b.category)
       )
     )
   );
 
   // Get biomarker data for selected biomarker
-  const selectedBiomarkerData = historicalTests[0]?.biomarkers.find(
+  const selectedBiomarkerData = orderedTests[0]?.biomarkers.find(
     b => b.id === selectedBiomarker
   );
 
   // Prepare chart data
-  const chartData = historicalTests.map(test => {
+  const chartData = orderedTests.map(test => {
     const biomarker = test.biomarkers.find(b => b.id === selectedBiomarker);
     return {
       date: new Date(test.uploadDate).toLocaleDateString("en-US", {
@@ -105,13 +105,13 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
   const filteredBiomarkers = selectedCategory === "all"
     ? allBiomarkerIds
     : allBiomarkerIds.filter(id => {
-        const biomarker = historicalTests[0]?.biomarkers.find(b => b.id === id);
+        const biomarker = orderedTests[0]?.biomarkers.find(b => b.id === id);
         return biomarker?.category === selectedCategory;
       });
 
   // Calculate trend
   const calculateTrend = (biomarkerId: string) => {
-    const values = historicalTests
+    const values = orderedTests
       .map(test => test.biomarkers.find(b => b.id === biomarkerId)?.value)
       .filter((v): v is number => v !== undefined);
     
@@ -142,9 +142,9 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
 
   let daySpanText = "N/A";
 
-  if (historicalTests.length > 0) {
-    const firstDate = new Date(historicalTests[0].uploadDate).getTime();
-    const lastDate = new Date(historicalTests[historicalTests.length - 1].uploadDate).getTime();
+  if (orderedTests.length > 0) {
+    const firstDate = new Date(orderedTests[0].uploadDate).getTime();
+    const lastDate = new Date(orderedTests[orderedTests.length - 1].uploadDate).getTime();
     
     // This is your calculation
     const dayDiff = (lastDate - firstDate) / (1000 * 60 * 60 * 24);
@@ -220,7 +220,7 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-gray-500" />
                 <span className="text-sm text-gray-600">
-                  {historicalTests.length} tests over {daySpanText}
+                  {orderedTests.length} tests over {daySpanText}
                 </span>
               </div>
             </div>
@@ -280,7 +280,7 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
         <div className="bg-gray-50 px-6 py-3 border-b">
           <h3>Biomarker Comparison Across Tests</h3>
           <p className="text-sm text-gray-600">
-            Compare values over {historicalTests.length} tests
+            Compare values over {orderedTests.length} tests
           </p>
         </div>
         
@@ -289,7 +289,7 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
             <TableHeader>
               <TableRow>
                 <TableHead className="min-w-[200px]">Biomarker</TableHead>
-                {historicalTests.map(test => (
+                {orderedTests.map(test => (
                   <TableHead key={test.id} className="text-center min-w-[120px]">
                     {new Date(test.uploadDate).toLocaleDateString("en-US", {
                       month: "short",
@@ -306,7 +306,7 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
             </TableHeader>
             <TableBody>
               {filteredBiomarkers.map(biomarkerId => {
-                const biomarker = historicalTests[0]?.biomarkers.find(b => b.id === biomarkerId);
+                const biomarker = orderedTests[0]?.biomarkers.find(b => b.id === biomarkerId);
                 if (!biomarker) return null;
                 
                 const trend = calculateTrend(biomarkerId);
@@ -321,7 +321,7 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
                         </div>
                       </div>
                     </TableCell>
-                    {historicalTests.map(test => {
+                    {orderedTests.map(test => {
                       const testBiomarker = test.biomarkers.find(b => b.id === biomarkerId);
                       if (!testBiomarker) {
                         return (
@@ -383,7 +383,7 @@ export function BiomarkerEvolution({ historicalTests }: BiomarkerEvolutionProps)
         <h3 className="mb-3 text-blue-900">Key Trends</h3>
         <ul className="space-y-2 text-sm text-blue-800">
           {filteredBiomarkers.slice(0, 5).map(biomarkerId => {
-            const biomarker = historicalTests[0]?.biomarkers.find(b => b.id === biomarkerId);
+            const biomarker = orderedTests[0]?.biomarkers.find(b => b.id === biomarkerId);
             const trend = calculateTrend(biomarkerId);
             
             if (Math.abs(trend.percentage) < 2 || !biomarker) return null;
