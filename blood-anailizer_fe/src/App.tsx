@@ -130,7 +130,7 @@ export default function App() {
   console.log("allTests:", allTests);
   return (
     // <div className="min-h-screen bg-gray-50">
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-blue-50 to-indigo-100">
       <Toaster />
       
       {/* Header */}
@@ -172,7 +172,7 @@ export default function App() {
           <div className="max-w-2xl mx-auto mt-12">
             <BloodTestUpload onFileSelect={handleFileSelect} hasData={hasData} />
             
-            <div className="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="p-6 bg-blue-50 rounded-lg border border-blue-200">
               <h3 className="mb-3 text-blue-900">Platform Features:</h3>
               <ul className="space-y-2 text-sm text-blue-800">
                 <li className="flex items-start gap-2">
