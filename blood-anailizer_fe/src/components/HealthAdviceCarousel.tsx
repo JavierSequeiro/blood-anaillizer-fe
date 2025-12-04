@@ -71,50 +71,7 @@ export function HealthAdviceCarousel() {
 
   const currentAdvice = healthAdvices[currentIndex];
   const Icon = currentAdvice.icon;
-
-  // return (
-  //   <Card className="overflow-hidden relative h-full">
-  //     <div className={`absolute inset-0 bg-gradient-to-br ${currentAdvice.color} opacity-10`} />
-  //     <div className="relative p-6 h-full flex flex-col justify-between">
-  //       <AnimatePresence mode="wait">
-  //         <motion.div
-  //           key={currentIndex}
-  //           initial={{ opacity: 0, y: 20 }}
-  //           animate={{ opacity: 1, y: 0 }}
-  //           exit={{ opacity: 0, y: -20 }}
-  //           transition={{ duration: 0.5 }}
-  //           className="space-y-4"
-  //         >
-  //             <div className="flex items-center gap-3">
-  //             <div className={`p-3 rounded-full bg-gradient-to-br ${currentAdvice.color}`}>
-  //               <Icon className="w-6 h-6 text-white" />
-  //             </div>
-  //             <h3 className="text-gray-900">{currentAdvice.title}</h3>
-  //           </div>
-  //           <p className="text-gray-700 leading-relaxed">
-  //             {currentAdvice.advice}
-  //           </p>
-  //         </motion.div>
-  //       </AnimatePresence>
-
-  //       {/* Carousel Indicators */}
-  //       <div className="flex gap-2 mt-6">
-  //         {healthAdvices.map((_, index) => (
-  //           <button
-  //             key={index}
-  //             onClick={() => setCurrentIndex(index)}
-  //             className={`h-1.5 rounded-full transition-all duration-300 ${
-  //               index === currentIndex
-  //                 ? "w-8 bg-gray-800"
-  //                 : "w-1.5 bg-gray-300 hover:bg-gray-400"
-  //             }`}
-  //             aria-label={`Go to advice ${index + 1}`}
-  //           />
-  //         ))}
-  //       </div>
-  //     </div>
-  //   </Card>
-  // );
+  
   return (
     <Card className="overflow-hidden relative h-full">
       <div
