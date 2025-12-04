@@ -6,6 +6,7 @@ import { BiomarkerTable } from "./components/BiomarkerTable";
 import { LLMReport } from "./components/LLMReport";
 import { BloodTestDashboard } from "./components/BloodTestDashboard";
 import { BiomarkerEvolution } from "./components/BiomarkerEvolution";
+import { HealthAdviceCarousel } from "./components/HealthAdviceCarousel";
 import { PastTests } from "./components/PastTests";
 import { AuthForm } from "./components/AuthForm";
 import { SettingsDialog } from "./components/SettingsDialog";
@@ -128,6 +129,7 @@ export default function App() {
 
   console.log("allTests:", allTests);
   return (
+    // <div className="min-h-screen bg-gray-50">
     <div className="min-h-screen bg-gray-50">
       <Toaster />
       
@@ -198,14 +200,14 @@ export default function App() {
           </div>
         ) : (
           <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2>Test Results Analysis</h2>
-                <p className="text-gray-600">
-                  {currentTest?.biomarkers?.length || 0} biomarkers analyzed • {new Date(currentTest?.uploadDate).toLocaleDateString() || 'Today'}
-                </p>
-              </div>
-              <BloodTestUpload onFileSelect={handleFileSelect} hasData={hasData} />
+            {/* <div className="flex items-center justify-between"> */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+              <HealthAdviceCarousel />
+
+              <BloodTestUpload
+                onFileSelect={handleFileSelect}
+                hasData={hasData}
+              />
             </div>
 
             <Tabs defaultValue="overview" className="w-full">
