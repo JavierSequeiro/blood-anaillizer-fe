@@ -8,7 +8,7 @@ import {
   TrendingUp,
   Brain,
 } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const healthAdvices = [
   {
