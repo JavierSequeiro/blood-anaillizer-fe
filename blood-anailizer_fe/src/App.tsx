@@ -201,7 +201,7 @@ export default function App() {
         ) : (
           <div className="space-y-6">
             {/* <div className="flex items-center justify-between"> */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 w-full">
               <HealthAdviceCarousel />
 
               <BloodTestUpload
